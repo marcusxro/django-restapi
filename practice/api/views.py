@@ -65,11 +65,17 @@ def user_details(request, pk):
     try:
         user = User.objects.get(pk=pk)  # Corrected from User.object to User.objects
     except User.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)  # It's better to return a 404 if the user doesn't exist
+        return Response({
+            "message": "User not found",
+            "status": status.HTTP_404_NOT_FOUND
+        }, status=status.HTTP_404_NOT_FOUND)  # Return a 404 if the user doesn't exist
     
     if request.method == 'DELETE':
         user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({
+            "message": "User deleted successfully",
+            "status": status.HTTP_204_NO_CONTENT
+        }, status=status.HTTP_204_NO_CONTENT)
     
     elif request.method == 'PUT':
         serializer = UserSerializer(user, data=request.data)
@@ -79,16 +85,11 @@ def user_details(request, pk):
                 "message": "User updated successfully",
                 "status": status.HTTP_200_OK,
                 "user": serializer.data
-            },
-            status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            }, status=status.HTTP_200_OK)
+        return Response({
+            "message": "Invalid data",
+            "errors": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-{
-    "fullname": "MARCUS SALOPASO",
-    "email": "asdasdasdasdd@mgail.com",
-    "age": 19,
-    "password": "asdasdasdas",
-    "role": "ADMIN"
-
-}
