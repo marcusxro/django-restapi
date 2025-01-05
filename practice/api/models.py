@@ -12,3 +12,11 @@ class User(models.Model):
     
     def __str__(self):
         return self.fullname
+
+# {
+#     "fullname": "MARCUS SALOPASO",
+#     "email": "marcussalopaso1@gmail.com",
+#     "age": 19,
+#     "password": "asdasdasdas",
+#     "role": "ADMIN"
+# }
